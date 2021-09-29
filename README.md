@@ -98,7 +98,16 @@ We do not have access to the real boat telemetry data from the Vendée Globe par
 
 First, make sure that [Python](https://www.python.org/downloads/) is installed on your computer. You can use either Windows, OS/X or Linux to run the sailing simulator.
 
-Next, you need to install the Python library for Azure Event Hubs. Open a command line window and run the following command:
+Now download the [Python Sailing Simulator](./race_simulator.py) and store it somewhere on your computer. We suggest you save the file in your Documents folder. Make sure you save the file as `race_simulator.py`.
+
+Next, open a Powershell window (or a Terminal window if you're using OS/X or Linux) and run the following command:
+
+`cd ~/Documents
+`
+
+This will change the current directory to the Documents folder where you have saved the racing simulator.
+
+Now you need to install the Python library for Azure Event Hubs. Run the following command:
 
 `pip install azure-eventhub
 `
@@ -107,9 +116,7 @@ This will install the Azure Event Hub library for Python on your computer.
 
 ![Setup step 7](./assets/setup_step7.jpg)
 
-Now download the [Python Sailing Simulator](./race_simulator.py) and store it somewhere on your computer. 
-
-Open the Python sailing simulator with your favorite text editor and take a look at lines 33 and 34. 
+The racing simulator is just a single file named `race_simulator.py`. Open this file with your favorite text editor and take a look at lines 33 and 34. 
 
 ![Setup step 8](./assets/setup_step8.jpg)
 
