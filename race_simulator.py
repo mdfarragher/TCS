@@ -73,24 +73,39 @@ def init_fleet():
             10 + random.uniform(-5, 5))
         FleetData.append(boat)
 
-        # report boat info
-        print ("Boat:", i, "Lat:", boat.Latitude, "Long:", boat.Longitude, "Heading:", boat.Heading, "Speed:", boat.Speed)
 
 # Send the fleet data to the EventHub 
 def send_events(producer):
     batch = producer.create_batch()
     for i in range(NUMBER_OF_BOATS):
         boat_data = FleetData[i]
+
+        # introduce random GPS corruption
+        latitude = boat_data.Latitude
+        longitude = boat_data.Longitude
+        if (random.randrange(0, 100) == 0):
+            latitude = -10000
+            longitude = -10000
+
+        # send the data record
         event_data = EventData(json.dumps({
             "boat": i,
-            "latitude": boat_data.Latitude,
-            "longitude": boat_data.Longitude,
+            "latitude": latitude,
+            "longitude": longitude,
             "heading": boat_data.Heading,
             "speed": boat_data.Speed
         }))
         event_data.content_type = "application/json"
         batch.add(event_data)
+
+        # report boat info
+        print ("Boat:", i, "Lat:", latitude, "Long:", longitude, "Heading:", boat_data.Heading, "Speed:", boat_data.Speed)
+    
     producer.send_batch(batch)
+
+    # report boat info
+    print ("Boat:", i, "Lat:", latitude, "Long:", longitude, "Heading:", boat_data.Heading, "Speed:", boat_data.Speed)
+
 
 # Update boat heading and speed
 def update_boat(boat):
@@ -136,9 +151,6 @@ def update_fleet():
         # update ship position (rough approximation)
         boat.Longitude += (vx * SIMULATION_SPEED / (60 * 85))
         boat.Latitude += (vy * SIMULATION_SPEED / (60 * 111))
-
-        # report boat info
-        print ("Boat:", i, "Lat:", boat.Latitude, "Long:", boat.Longitude, "Heading:", boat.Heading, "Speed:", boat.Speed)
 
 
 # check if the eventhub namespace connection string has been set
