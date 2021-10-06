@@ -174,11 +174,13 @@ During the business case, you will need to address several challenges:
 
 There are multiple solutions for each challenge.
 
-## Bonus
 
-If you want to impress us, try to adds some extra functionality to your PowerBI report that uses Machine Learning. For example, you could use Machine Learning to predict which racing team will be in the lead tomorrow, and show these predictions in your report.
+## View a complete solution
 
-This bonus is purely optional. Only spend time on this if you have already completed the main objectives of this business case and want to do a little bit extra. 
+![Spoiler Alert](./assets/spoiler.jpg)
 
-Good luck! We look forward to seeing your PowerBI dashboards!
+If you get completely stuck and need help, or if you like to take a peek at a complete working solution, you can do so by clicking the link below:
 
+[View a complete working solution](./working_solution.md)
+
+But please only look at the solution if you're unable to continue on your own. Figuring out the architecture yourself is half the fun of doing this business case!
