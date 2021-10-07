@@ -16,16 +16,16 @@ The picture identifies most of the Azure services you need to provision:
 
 * An Event Hub for collecting sailing boat data
 * A Stream Analytics Job for processing the data in real time
-* A Power BI report for displaying the data
+* A Power BI dashboard for displaying the data
 * A database for collecting data batches and preforming batch calculations
 
 You can choose what kind of database you want to use for batch processing. The Azure SQL Database, Azure Cosmos DB and Azure Synapse Analytics will all work. 
 
 In this solution, I will use Azure Synapse Analytics. 
 
-## The Power BI report
+## The Power BI dashboard
 
-The Power BI report needs to display at least two widgets:
+The Power BI dashboard needs to display at least two widgets:
 
 * A world map with the current position of each sailing boat in the race. 
 * A table with sailing boats ranked by position. The boat in the lead should appear at the top, the boat in second position should appear next, and so on. 
@@ -43,6 +43,21 @@ But the table shows the boat top-10 rankings. You cannot calculate these ranking
 To calculate boat rankings, you have to collect every position of the boat since the start of the race (this is the 'batch') and then use an analytical query to calculate which boat is in the lead. 
 
 So you'll also need the slow path or batch processing path to perform this calculation, and forward the results into Power BI for display.
+
+**Why a dashboard?**
+
+You might be wondering why I'm creating a Power BI _dashboard_ and not a report? 
+
+It's because Power BI reports can only connect to a single data source. But in this business case, you actually have to connect to two data sources:
+
+1. The Power BI dataset with the real-time data produced by the Python racing simulator
+2. A top-10 list of boats ranked by their position in the race. This list will be produced by the batch processing path of the Lambda Architecture.
+
+You unfortunately cannot create one single Power BI report that combines both data sources. 
+
+However, what you can do is create _two_ Power BI reports: one with only the world map, and one with only the boat rankings. Then you can pin these two visuals together into a single Power BI dashboard.
+
+This is the strategy I will be following when building this solution.
 
 **Alternate solution:** 
 
@@ -212,15 +227,31 @@ Your next step is to open Power BI and create a new report that imports the Parq
 
 Assuming you do have a Power BI Pro account, your next step is to present the real-time boat data in Power BI on a world map. 
 
-Open Power BI and drag a map visual onto the report designer and configure it as follows:
+Open Power BI and create a new report. Then click the 'Get Data' link.
 
-* Legend: boat (from the BoatData table)
-* Latitude: latitude (from the BoatData table)
-* Longitude: longitude (from the BoatData table)
+![Boat map report step 1](./assets/mapreport_install1.jpg)
 
-If you left the Python app running for long enough, the 10 boat tracks should appear on the map.
+In the Get Data popup, select the POWER PLATFORM category and choose the Power BI Dataset option.
 
-![Power BI map setup step 1](./assets/powerbi_map1.jpg)
+![Boat map report step 2](./assets/mapreport_install2.jpg)
+
+In the next screen, select the Power BI dataset you set up when configuring the Stream Analytics Power BI output. In my solution this dataset is called 'SailingCase'.
+
+![Boat map report step 3](./assets/mapreport_install3.jpg)
+
+You'll see a blank report canvas next. Now drag a map visual onto the report designer and configure it as follows:
+
+* Legend: boat
+* Latitude: latitude
+* Longitude: longitude
+
+If you left the Python app running for long enough, the 10 boat tracks should be clearly visible on the map.
+
+![Boat map report step 4](./assets/mapreport_install4.jpg)
+
+Now click the publish button at the top of the page to save your report and upload it to Power BI online. 
+
+![Boat map report step 5](./assets/mapreport_install5.jpg)
 
 Cogratulations! At this point the real-time part of the business case is all done. You have created a Power BI report that updates live with boat data and shows the actual position of each boat on a world map. 
 
@@ -419,6 +450,65 @@ At this point we're done with the batch processing path of the Lambda Architectu
 
 Now all that remains is for us to import the Parquet file with the boat rankings into Power BI and show it in a table next to the world map.
 
-## Adding boat rankings to Power BI
+## Building the ranking visual in Power BI
 
-TODO
+Open Power BI and create a new report. Then click the 'Get Data' link.
+
+![Boat ranking report step 1](./assets/rankreport_install1.jpg)
+
+In the Get Data popup, select the FILE category and choose the Parquet file format.
+
+![Boat ranking report step 2](./assets/rankreport_install2.jpg)
+
+Then in the next screen, type the full URL to the Parquet file in the primary data lake that holds the boat ranking data.
+
+The format of this URL is:
+
+`
+[Datalake URL][container][folders...][filename]
+`
+
+In my solution, the URL is:
+
+`
+https://mdftsailingcasedlake.blob.core.windows.net/workspace/sailingdata/boatranking/E72109CB-3CDB-48E8-B84E-C6FFA4013F8F_26_0-1.parquet
+`
+
+Note that my datalake is called `mdftsailingcasedlake`, my container is called `workspace`, I stored the file in the folders `sailingdata/boatranking`, and I'm providing the exact filename of the Parquet file.
+
+![Boat ranking report step 3](./assets/rankreport_install3.jpg)
+
+You should now see the entire ranking table appear in Power BI. Simply click the LOAD button at the bottom of the popup to start loading the data into Power BI.
+
+![Boat ranking report step 4](./assets/rankreport_install4.jpg)
+
+You're now ready to start designing the report. Drag a TABLE visualisation onto the report design surface and configure it to display the boat, distance and hours columns in unsummarized form.
+
+![Boat ranking report step 5](./assets/rankreport_install5.jpg)
+
+And that's it, this report is done.
+
+Now click publish to save the report and publish it to Power BI online. 
+
+![Boat ranking report step 6](./assets/rankreport_install6.jpg)
+
+## Building the Power BI dashboard
+
+All that remains now is to create a new Power BI dashboard that combines the map visual and the ranking table. 
+
+Go to your Power BI online account and access the map report that you published earlier. Hover your mouse over the map until you see the 'Pin to dashboard' icon appear (it's a little safety pin in the top right of the visual).
+
+Click the pin, select 'New dashboard' and type a nice name for your Power BI dashboard.
+
+![Boat dashboard step 1](./assets/dashboard_install1.jpg)
+
+Now go to the boat ranking report and do the same: hover your mouse over the table, click the pin icon, and pin the visual to the dashboard you just created.
+
+![Boat dashboard step 2](./assets/dashboard_install2.jpg)
+
+Finally, open the dashboard you just created and drag and resize the map and table visuals until you are happy with the layout.
+
+![Boat dashboard step 3](./assets/dashboard_install3.jpg)
+
+And that's it. The business case is complete!
+
