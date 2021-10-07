@@ -15,7 +15,7 @@ In this business case, you will assume the role of Nokia. You will build a cloud
 
 ![Lambda Architecture](./assets/lambda_architecture.png)
 
-The Lambda Architecture should send all boat data to a PowerBI report. The report should display a world map with the current position of each boat, and a table with a ranking of racing teams. The ranking table should be sorted by who is currently in the lead. 
+The Lambda Architecture should send all boat data to a PowerBI dashboard. The dashboard should display a world map with the current position of each boat, and a table with a ranking of racing teams. The ranking table should be sorted by who is currently in the lead. 
 
 We are currently between races, so unfortunately we cannot use the actual data from the boats participating in the race. Instead, you are going to use a [Python application](./race_simulator.py) that will simulate boat telemetry data from a fleet of 10 race participants. 
 
@@ -26,7 +26,7 @@ To complete this business case, you will need to do the following:
 3. Download the Python race simulation app to your local computer. Configure the app to send data to your EventHub.
 4. Start the Python app. Every 60 seconds, the telemetry of the simulated racing boats will be sent to your Azure cloud.
 
-You will have completed the business case if your PowerBI report correctly shows the position and ranking of each sailing team in the race.
+You will have completed the business case if your PowerBI dashboard correctly shows the position and ranking of each sailing team in the race.
 
 Good luck!
 
@@ -161,16 +161,16 @@ To complete the business case, here's what you need to add:
 * A view or stored procedure or Synapse notebook to calculate the table of teans ranked by position in the race.
 * A PowerBI dashboard that displays a world map with the current location of each racing team, and a table with the teams ranked by position in the race.
 
-You will have completed the business case when your PowerBI report correctly shows the position and ranking of each sailing team in the race. The report should update live when new data arrives from the running Python sailing simulator.
+You will have completed the business case when your PowerBI dashboard correctly shows the position and ranking of each sailing team in the race. 
 
 ## Challenges
 
 During the business case, you will need to address several challenges:
 
-* The Python app occasionally produces garbled data. How are you going to ensure that only clean data arrives in the PowerBI report? 
+* The Python app occasionally produces garbled data. How are you going to ensure that only clean data arrives in the PowerBI dashboard? 
 * How are you going to calculate the ranked list of sailing teams? How will you calculate who is ahead in the race?
 * Which data service are you going to use for the batch-processing path in the Lambda Architecture?
-* How will you present your data in the PowerBI report?
+* How will you present your data in the PowerBI dashboard?
 
 There are multiple solutions for each challenge.
 

@@ -30,9 +30,9 @@ The Power BI dashboard needs to display at least two widgets:
 * A world map with the current position of each sailing boat in the race. 
 * A table with sailing boats ranked by position. The boat in the lead should appear at the top, the boat in second position should appear next, and so on. 
 
-Here is a possible layout for the report:
+Here is a possible layout for the dashboard:
 
-![Power BI report](./assets/report_design.jpg)
+![Power BI dashboard](./assets/report_design.jpg)
 
 The big widget on the left is a map visual that displays the real-time boat positions, and the widget on the right is a table visual that shows the calculated boat top-10 rankings throughout the race. 
 
@@ -80,7 +80,7 @@ Every once in a while (roughly once every 100 updates), this will happen:
 
 One of the boats is incorrectly reporting its position as -10000 longitude and -10000 latitude. This is clearly incorrect. 
 
-We must make sure this data never reaches the Power BI report, because it would mess up the boat track on the world map. 
+We must make sure this data never reaches Power BI, because it would mess up the boat track on the world map. 
 
 
 ## Building the Real-Time path
