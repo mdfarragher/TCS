@@ -309,7 +309,7 @@ Go to the QUERY page of the Stream Analytics job and change the transformation q
 SELECT
     *
 INTO
-    [blobStorage]
+    [powerBI]
 FROM
     [eventHub]
 WHERE
